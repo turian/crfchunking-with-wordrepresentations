@@ -17,3 +17,30 @@ generation code, so one can easily add new features.
 
 We have instructions and scripts for how we add word representations
 (Brown clusters and/or word embeddings) to the training.
+
+INSTALLATION:
+-------------
+
+Download and install CRFsuite: http://www.chokkan.org/software/crfsuite/
+
+Go into data/ and download the CoNLL train and test files:
+    
+
+NOTE:
+-----
+
+CRFsuite has benchmark results on the CoNLL shared task:
+    http://www.chokkan.org/software/crfsuite/benchmark.html
+
+However, I did not achievable achieve comparable F1 score on the CoNLL
+test set until I used the following parameters:
+
+Dev F1  Test F1  params
+94.04     93.63     l2=2
+94.03     93.65     l2=3.2, possible_transitions=1
+94.15     93.73     l2=3.2, possible_transitions=1, possible_states=1
+94.16     93.79     SGD, l2=3.2, possible_transitions=1, possible_states=1
+
+I chose the l2 penalty on the dev set, which was a subset of the
+training data.
+I then used this l2 penalty and trained over the entire training set.
