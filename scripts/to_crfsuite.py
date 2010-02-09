@@ -2,17 +2,19 @@
 """
 Code originally from CRFsuite, modified by Joseph Turian to include representations.
 
-You can enter combinations of brown and/or embeddings representations
+You can enter combinations of brown and/or embedding representations
 to add to the feature set.
 """
 
 import sys, string
+from common.file import myopen
 
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-b", "--brown", dest="brown", action="append", help="brown clusters to use")
-parser.add_option("-e", "--embeddings", dest="embeddings", action="append", help="embeddings to use")
-parser.add_option("-p", "--prefixes", dest="prefixes", default="4,6,10,20", help="brown prefixes")
+parser.add_option("-e", "--embedding", dest="embedding", action="append", help="embedding to use")
+parser.add_option("--brown-prefixes", dest="prefixes", default="4,6,10,20", help="brown prefixes")
+parser.add_option("--embedding-scale", dest="embeddingscale", type="float", default="1.0", help="scaling factor for embeddings")
 
 (options, args) = parser.parse_args()
 assert len(args) == 0
@@ -20,9 +22,6 @@ assert len(args) == 0
 prefixes = [int(s) for s in string.split(options.prefixes, sep=",")]
 
 if options.brown is None: options.brown = []
-
-from common.file import myopen
-import string
 word_to_cluster = []
 for i, brownfile in enumerate(options.brown):
     print >> sys.stderr, "Reading Brown file: %s" % brownfile
@@ -31,6 +30,16 @@ for i, brownfile in enumerate(options.brown):
     for l in myopen(brownfile):
         cluster, word, cnt = string.split(l)
         word_to_cluster[i][word] = cluster
+
+if options.embedding is None: options.embedding = []
+word_to_embedding = []
+for i, embeddingfile in enumerate(options.embedding):
+    print >> sys.stderr, "Reading Embedding file: %s" % embeddingfile
+    word_to_embedding.append({})
+    assert len(word_to_embedding) == i+1
+    for l in myopen(embeddingfile):
+        sp = string.split(l)
+        word_to_embedding[i][sp[0]] = [float(v)*options.embeddingscale for v in sp[1:]]
 
 def output_features(fo, seq):
     for i in range(2, len(seq)-2):
@@ -44,11 +53,18 @@ def output_features(fo, seq):
         fs.append('U05=%s/%s' % (seq[i-1][0], seq[i][0]))
         fs.append('U06=%s/%s' % (seq[i][0], seq[i+1][0]))
 
-        for cluster in word_to_cluster:
+        for j, cluster in enumerate(word_to_cluster):
             for name, pos in zip(["U00", "U01", "U02", "U03", "U04"], [i-2,i-1,i,i+1,i+2]):
                 if seq[pos][0] not in cluster: continue
                 for p in prefixes:
-                    fs.append("%sbp%d=%s" % (name, p, cluster[seq[pos][0]][:p]))
+                    fs.append("%sbp%d-%d=%s" % (name, j, p, cluster[seq[pos][0]][:p]))
+
+        for j, embedding in enumerate(word_to_embedding):
+            for name, pos in zip(["U00", "U01", "U02", "U03", "U04"], [i-2,i-1,i,i+1,i+2]):
+                w = seq[pos][0]
+                if w not in embedding: w = "*UNKNOWN*"
+                for d in range(len(embedding[w])):
+                    fs.append("%se%d-%d=1:%g" % (name, j, d, embedding[w][d]))
 
 
         fs.append('U10=%s' % seq[i-2][1])
