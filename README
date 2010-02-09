@@ -23,6 +23,9 @@ INSTALLATION:
 
 Download and install CRFsuite: http://www.chokkan.org/software/crfsuite/
 
+You will need my common Python library:
+    http://github.com/turian/common
+
 Go into data/ and download the CoNLL train and test files:
     cd data/
     wget http://www.cnts.ua.ac.be/conll2000/chunking/train.txt.gz
