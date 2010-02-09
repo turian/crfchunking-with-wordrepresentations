@@ -1,0 +1,19 @@
+CRF chunking with word representations
+--------------------------------------
+
+    scripts and steps by Joseph Turian
+
+A standard baseline in NLP is chunking (shallow parsing), which was the
+CoNLL 2000 shared task. Training a CRF is a standard approach to this task
+(Sha + Pereira 2003). In fact, many CRF implementations include
+instructions for reimplementing the Sha+Pereira chunker with identical
+features:
+    crfsgd: http://leon.bottou.org/projects/sgd
+    crf++: http://crfpp.sourceforge.net/
+    CRFsuite: http://www.chokkan.org/software/crfsuite/
+
+We use CRFsuite because it makes it simple to modify the feature
+generation code, so one can easily add new features.
+
+We have instructions and scripts for how we add word representations
+(Brown clusters and/or word embeddings) to the training.
