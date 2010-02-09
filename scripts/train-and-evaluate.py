@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 """
+WARNING: Every time you change the --features parameter, you should also change the --name.
+
 TODO: Write all parameters to workdir/parameters
 TODO: Log all commands and output to a file.
+TODO: We might write the same features file several times, but it is
+better than different jobs clobbering each others files.
 """
 
 import sys, string
 from common.file import myopen
 from common.stats import stats
+
+print >> sys.stderr, "WARNING: Everytime you change the --features parameter, you should also change the --name."
 
 from optparse import OptionParser
 parser = OptionParser()
@@ -48,8 +54,13 @@ def run(cmd):
     os.system(cmd)
     print >> sys.stderr, stats()
 
-featurestrainfile = join(workdir, "features-%s" % trainfile)
-featuresevalfile = join(workdir, "features-%s" % evalfile)
+#TODO: We might write the same features file several times, but it is
+#better than different jobs clobbering each others files.
+#featurestrainfile = join(workdir, "features-%s" % trainfile)
+#featuresevalfile = join(workdir, "features-%s" % evalfile)
+featurestrainfile = join(workdir, "features.l2=%s.%s" % (options.l2, trainfile))
+featuresevalfile = join(workdir, "features.l2=%s.%s" % (options.l2, evalfile))
+
 predictedevalfile = join(workdir, "predicted.l2=%s.%s" % (options.l2, evalfile))
 scoredevalfile = join(workdir, "evaluation.l2=%s.%s" % (options.l2, evalfile))
 modelfile = join(workdir, "model.l2=%s.%s" % (options.l2, trainfile))
@@ -67,6 +78,9 @@ run(cmd)
 cmd = "crfsuite tag -m %s %s | %s %s - > %s" % (modelfile, featuresevalfile, combinescript, join(datadir, evalfile), predictedevalfile)
 run(cmd)
 run("gzip -f %s" % featuresevalfile)
+run("gzip -f %s" % modelfile)
 
 cmd = "%s < %s > %s" % (evalscript, predictedevalfile, scoredevalfile)
 run(cmd)
+
+print >> sys.stderr, "WARNING: Everytime you change the --features parameter, you should also change the --name."

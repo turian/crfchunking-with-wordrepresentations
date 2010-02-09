@@ -48,7 +48,10 @@ Download word representations:
 BATCH EVALUATIONS
 -----------------
 
-./scripts/train-and-evaluate.py -n baseline --dev --l2  2
+./scripts/train-and-evaluate.py -name baseline --dev --l2  2
+
+WARNING: Everytime you change the --features parameter, you should also
+change the --name.
 
 
 NOTE:

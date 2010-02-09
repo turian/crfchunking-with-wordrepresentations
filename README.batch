@@ -1,0 +1,16 @@
+# Baseline
+./scripts/train-and-evaluate.py -n baseline --dev --l2 1 &
+./scripts/train-and-evaluate.py -n baseline --dev --l2 2 &
+./scripts/train-and-evaluate.py -n baseline --dev --l2 3.2 &
+./scripts/train-and-evaluate.py -n baseline --dev --l2 6 &
+./scripts/train-and-evaluate.py -n baseline --dev --l2 10 &
+
+# Brown
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py \
+    -n brown-c100 --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt\" '--l2 {{1,2,3.2,6,10}}'
+
+./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 1 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
+./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 2 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
+./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 3.2 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
+./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 6 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
+./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 10 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
