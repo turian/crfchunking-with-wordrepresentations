@@ -1,3 +1,14 @@
+Download the CoNLL train and test files:
+    wget http://www.cnts.ua.ac.be/conll2000/chunking/train.txt.gz
+    wget http://www.cnts.ua.ac.be/conll2000/chunking/test.txt.gz
+    gunzip *.gz
+
+Here are the files you should have in the directory:
+    train.txt           CoNLL2000 full training data.
+    test.txt            CoNLL2000 full test data.
+    dev-partition.txt   1000 random sentences, used for choosing hyperparameters (l2 sigma).
+    train-partition.txt Training data minus 1000 random sentences.
+
 Here is how I partitioned out 1K sentences for dev:
 
 [15:55][turian@rubis:~/data/conll2000-chunking]$ ./one-sentence-per-line.pl orig/test.txt > test.1.txt
