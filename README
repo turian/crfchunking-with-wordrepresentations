@@ -29,7 +29,18 @@ Go into data/ and download the CoNLL train and test files:
     wget http://www.cnts.ua.ac.be/conll2000/chunking/test.txt.gz
     gunzip *.gz
     
+Download word representations:
+    cd representations/
 
+    wget http://pylearn.org/turian/brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt
+    wget http://pylearn.org/turian/brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c320-freq1.txt
+    wget http://pylearn.org/turian/brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt
+    wget http://pylearn.org/turian/brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt
+
+    wget http://pylearn.org/turian/embeddings-ACL2010-20100116-redo-baseline-with-100dims/model-1750000000.LEARNING_RATE%3d1e-09.EMBEDDING_LEARNING_RATE%3d1e-06.EMBEDDING_SIZE%3d200.txt.gz
+    wget http://pylearn.org/turian/embeddings-ACL2010-20100116-redo-baseline-with-100dims/model-2030000000.LEARNING_RATE%3d1e-09.EMBEDDING_LEARNING_RATE%3d1e-06.EMBEDDING_SIZE%3d100.txt.gz
+    wget http://pylearn.org/turian/embeddings-ACL2010-20100116-redo-baseline-with-100dims/model-2270000000.LEARNING_RATE%3d1e-09.EMBEDDING_LEARNING_RATE%3d1e-06.txt.gz
+    wget http://pylearn.org/turian/embeddings-ACL2010-20100116-redo-baseline-with-100dims/model-2280000000.LEARNING_RATE%3d1e-08.EMBEDDING_LEARNING_RATE%3d1e-07.EMBEDDING_SIZE%3d25.txt.gz
 
 
 NOTE:
