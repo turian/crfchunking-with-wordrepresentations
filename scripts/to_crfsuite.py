@@ -15,6 +15,7 @@ parser.add_option("-b", "--brown", dest="brown", action="append", help="brown cl
 parser.add_option("-e", "--embedding", dest="embedding", action="append", help="embedding to use")
 parser.add_option("--brown-prefixes", dest="prefixes", default="4,6,10,20", help="brown prefixes")
 parser.add_option("--embedding-scale", dest="embeddingscale", type="float", default="1.0", help="scaling factor for embeddings")
+parser.add_option("--no-pos-features", dest="no_pos_features", default=False, action="store_true", help="don't use any POS features")
 
 (options, args) = parser.parse_args()
 assert len(args) == 0
@@ -66,20 +67,20 @@ def output_features(fo, seq):
                 for d in range(len(embedding[w])):
                     fs.append("%se%d-%d=1:%g" % (name, j, d, embedding[w][d]))
 
-
-        fs.append('U10=%s' % seq[i-2][1])
-        fs.append('U11=%s' % seq[i-1][1])
-        fs.append('U12=%s' % seq[i][1])
-        fs.append('U13=%s' % seq[i+1][1])
-        fs.append('U14=%s' % seq[i+2][1])
-        fs.append('U15=%s/%s' % (seq[i-2][1], seq[i-1][1]))
-        fs.append('U16=%s/%s' % (seq[i-1][1], seq[i][1]))
-        fs.append('U17=%s/%s' % (seq[i][1], seq[i+1][1]))
-        fs.append('U18=%s/%s' % (seq[i+1][1], seq[i+2][1]))
+        if not options.no_pos_features:
+            fs.append('U10=%s' % seq[i-2][1])
+            fs.append('U11=%s' % seq[i-1][1])
+            fs.append('U12=%s' % seq[i][1])
+            fs.append('U13=%s' % seq[i+1][1])
+            fs.append('U14=%s' % seq[i+2][1])
+            fs.append('U15=%s/%s' % (seq[i-2][1], seq[i-1][1]))
+            fs.append('U16=%s/%s' % (seq[i-1][1], seq[i][1]))
+            fs.append('U17=%s/%s' % (seq[i][1], seq[i+1][1]))
+            fs.append('U18=%s/%s' % (seq[i+1][1], seq[i+2][1]))
         
-        fs.append('U20=%s/%s/%s' % (seq[i-2][1], seq[i-1][1], seq[i][1]))
-        fs.append('U21=%s/%s/%s' % (seq[i-1][1], seq[i][1], seq[i+1][1]))
-        fs.append('U22=%s/%s/%s' % (seq[i][1], seq[i+1][1], seq[i+2][1]))
+            fs.append('U20=%s/%s/%s' % (seq[i-2][1], seq[i-1][1], seq[i][1]))
+            fs.append('U21=%s/%s/%s' % (seq[i-1][1], seq[i][1], seq[i+1][1]))
+            fs.append('U22=%s/%s/%s' % (seq[i][1], seq[i+1][1], seq[i+2][1]))
 
         fo.write('%s\t%s\n' % (seq[i][2], '\t'.join(fs)))
     fo.write('\n')
