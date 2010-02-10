@@ -9,8 +9,18 @@
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py \
     -n brown-c100 --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt\" '--l2 {{1,2,3.2,6,10}}'
 
+# Brown c1000
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 1 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 2 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 3.2 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 6 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 10 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
+
+# C&W Embeddings 50 dim, scale 1
+./scripts/train-and-evaluate.py -n cw-dim50-scale1 --dev --l2 1 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 1" &
+./scripts/train-and-evaluate.py -n cw-dim50-scale1 --dev --l2 2 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 1" &
+./scripts/train-and-evaluate.py -n cw-dim50-scale1 --dev --l2 3.2 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 1" &
+./scripts/train-and-evaluate.py -n cw-dim50-scale1 --dev --l2 6 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 1" &
+./scripts/train-and-evaluate.py -n cw-dim50-scale1 --dev --l2 10 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 1" &
+
+#HLBL ?

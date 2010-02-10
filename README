@@ -45,6 +45,12 @@ Download word representations:
     wget http://pylearn.org/turian/embeddings-ACL2010-20100116-redo-baseline-with-100dims/model-2270000000.LEARNING_RATE%3d1e-09.EMBEDDING_LEARNING_RATE%3d1e-06.txt.gz
     wget http://pylearn.org/turian/embeddings-ACL2010-20100116-redo-baseline-with-100dims/model-2280000000.LEARNING_RATE%3d1e-08.EMBEDDING_LEARNING_RATE%3d1e-07.EMBEDDING_SIZE%3d25.txt.gz
 
+    ln -s model-1750000000.LEARNING_RATE=1e-09.EMBEDDING_LEARNING_RATE=1e-06.EMBEDDING_SIZE=200.txt.gz cw-embeddings-200dim.txt.gz
+    ln -s model-2030000000.LEARNING_RATE\=1e-09.EMBEDDING_LEARNING_RATE\=1e-06.EMBEDDING_SIZE\=100.txt.gz cw-embeddings-100dim.txt.gz 
+    ln -s model-2270000000.LEARNING_RATE\=1e-09.EMBEDDING_LEARNING_RATE\=1e-06.txt.gz cw-embeddings-50dim.txt.gz
+    ln -s model-2280000000.LEARNING_RATE\=1e-08.EMBEDDING_LEARNING_RATE\=1e-07.EMBEDDING_SIZE\=25.txt.gz cw-embeddings-25dim.txt.gz
+
+
 BATCH EVALUATIONS
 -----------------
 

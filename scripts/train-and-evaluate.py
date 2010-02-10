@@ -70,7 +70,7 @@ run(cmd)
 
 cmd = "crfsuite learn -p algorithm=sgd -p feature.possible_transitions=1 -p feature.possible_states=1  -p regularization.sigma=%s -m %s %s 2>&1 | tee %s.err" % (options.l2, modelfile, featurestrainfile, modelfile)
 run(cmd)
-run("gzip -f %s" % trainfile)
+run("gzip -f %s" % featurestrainfile)
 
 cmd = "cat %s | %s %s > %s" % (join(datadir, evalfile), featurescript, options.features, featuresevalfile)
 run(cmd)
