@@ -65,6 +65,9 @@ predictedevalfile = join(workdir, "predicted.l2=%s.%s" % (options.l2, evalfile))
 scoredevalfile = join(workdir, "evaluation.l2=%s.%s" % (options.l2, evalfile))
 modelfile = join(workdir, "model.l2=%s.%s" % (options.l2, trainfile))
 
+if os.path.exists(scoredevalfile):
+    print >> sys.stderr, "%s exists. STOPPING" % scoredevalfile
+
 cmd = "cat %s | %s %s > %s" % (join(datadir, trainfile), featurescript, options.features, featurestrainfile)
 run(cmd)
 
