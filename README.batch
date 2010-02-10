@@ -1,20 +1,34 @@
 # Baseline
+# dev: l2=3.2 or 6, 94.16
 ./scripts/train-and-evaluate.py -n baseline --dev --l2 1 &
 ./scripts/train-and-evaluate.py -n baseline --dev --l2 2 &
 ./scripts/train-and-evaluate.py -n baseline --dev --l2 3.2 &
 ./scripts/train-and-evaluate.py -n baseline --dev --l2 6 &
 ./scripts/train-and-evaluate.py -n baseline --dev --l2 10 &
 
-# Brown
-dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py \
-    -n brown-c100 --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt\" '--l2 {{1,2,3.2,6,10}}'
+# Brown c100
+#
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c100 --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt\" '--l2 {{1,2,3.2,6,10}}'
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c100 --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt\" '--l2 20'
+
+# Brown c320
+# dev: l2=6, 94.40
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c320 --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c320-freq1.txt\" '--l2 {{1,2,3.2,6,10}}'
 
 # Brown c1000
+# dev: l2=2, F1 94.62
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 1 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 2 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 3.2 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 6 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
 ./scripts/train-and-evaluate.py -n brown-c1000 --dev --l2 10 -f "-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt" &
+
+# Brown c3200
+# dev: l2=6, 94.67
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c3200 --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt\" '--l2 {{1,2,3.2,6,10}}'
+
+# Brown c3200, more prefixes
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c3200-prefixes --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt --brown-prefixes=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20\" '--l2 {{1,2,3.2,6,10}}'
 
 # C&W Embeddings 50 dim, scale 1
 ./scripts/train-and-evaluate.py -n cw-dim50-scale1 --dev --l2 1 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 1" &
@@ -23,4 +37,81 @@ dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py \
 ./scripts/train-and-evaluate.py -n cw-dim50-scale1 --dev --l2 6 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 1" &
 ./scripts/train-and-evaluate.py -n cw-dim50-scale1 --dev --l2 10 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 1" &
 
-#HLBL ?
+# C&W Embeddings 50 dim, scale 0.1
+./scripts/train-and-evaluate.py -n cw-dim50-scale0.1 --dev --l2 1 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1" &
+./scripts/train-and-evaluate.py -n cw-dim50-scale0.1 --dev --l2 2 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1" &
+./scripts/train-and-evaluate.py -n cw-dim50-scale0.1 --dev --l2 3.2 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1" &
+./scripts/train-and-evaluate.py -n cw-dim50-scale0.1 --dev --l2 6 -f "-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1" &
+
+# C&W Embeddings 50 dim, scale 10
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim50-scale10 --dev -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 10\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 50 dim, scale 0.32
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim50-scale0.32 --dev -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.32\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 50 dim, scale 3.2
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim50-scale3.2 --dev -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 3.2\" '--l2 {{1,2,3.2,6}}'
+
+# C&W Embeddings 100 dim, scale 1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim100-scale1 --dev -f \"-e representations/cw-embeddings-100dim.txt.gz --embedding-scale 1\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 100 dim, scale 0.1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim100-scale0.1 --dev -f \"-e representations/cw-embeddings-100dim.txt.gz --embedding-scale 0.1\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 100 dim, scale 10
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim100-scale10 --dev -f \"-e representations/cw-embeddings-100dim.txt.gz --embedding-scale 10\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 100 dim, scale 0.32
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim100-scale0.32 --dev -f \"-e representations/cw-embeddings-100dim.txt.gz --embedding-scale 0.32\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 100 dim, scale 3.2
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim100-scale3.2 --dev -f \"-e representations/cw-embeddings-100dim.txt.gz --embedding-scale 3.2\" '--l2 {{1,2,3.2,6}}'
+
+# C&W Embeddings 200 dim, scale 1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim200-scale1 --dev -f \"-e representations/cw-embeddings-200dim.txt.gz --embedding-scale 1\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 200 dim, scale 0.1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim200-scale0.1 --dev -f \"-e representations/cw-embeddings-200dim.txt.gz --embedding-scale 0.1\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 200 dim, scale 10
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim200-scale0.1 --dev -f \"-e representations/cw-embeddings-200dim.txt.gz --embedding-scale 10\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 200 dim, scale 0.32
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim200-scale0.32 --dev -f \"-e representations/cw-embeddings-200dim.txt.gz --embedding-scale 0.32\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 200 dim, scale 3.2
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim200-scale3.2 --dev -f \"-e representations/cw-embeddings-200dim.txt.gz --embedding-scale 3.2\" '--l2 {{1,2,3.2,6}}'
+
+# C&W Embeddings 25 dim, scale 1
+# dev: l2=3.2, 94.40
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim25-scale1 --dev -f \"-e representations/cw-embeddings-25dim.txt.gz --embedding-scale 1\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 25 dim, scale 0.1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim25-scale0.1 --dev -f \"-e representations/cw-embeddings-25dim.txt.gz --embedding-scale 0.1\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 25 dim, scale 10
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim25-scale0.1 --dev -f \"-e representations/cw-embeddings-25dim.txt.gz --embedding-scale 10\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 25 dim, scale 0.32
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim25-scale0.32 --dev -f \"-e representations/cw-embeddings-25dim.txt.gz --embedding-scale 0.32\" '--l2 {{1,2,3.2,6}}'
+# C&W Embeddings 25 dim, scale 3.2
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim25-scale3.2 --dev -f \"-e representations/cw-embeddings-25dim.txt.gz --embedding-scale 3.2\" '--l2 {{1,2,3.2,6}}'
+
+# HLBL 100 dim, scale 1
+./scripts/train-and-evaluate.py -n hlbl-dim100-scale1 --dev --l2 1 -f "-e representations/hlbl-embeddings-100dim.txt.gz --embedding-scale 1" &
+./scripts/train-and-evaluate.py -n hlbl-dim100-scale1 --dev --l2 2 -f "-e representations/hlbl-embeddings-100dim.txt.gz --embedding-scale 1" &
+./scripts/train-and-evaluate.py -n hlbl-dim100-scale1 --dev --l2 3.2 -f "-e representations/hlbl-embeddings-100dim.txt.gz --embedding-scale 1" &
+./scripts/train-and-evaluate.py -n hlbl-dim100-scale1 --dev --l2 6 -f "-e representations/hlbl-embeddings-100dim.txt.gz --embedding-scale 1" &
+# HLBL Embeddings 100 dim, scale 10
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim100-scale10 --dev -f \"-e representations/hlbl-embeddings-100dim.txt.gz --embedding-scale 10\" '--l2 {{1,2,3.2,6}}'
+# HLBL Embeddings 100 dim, scale 0.1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim100-scale0.1 --dev -f \"-e representations/hlbl-embeddings-100dim.txt.gz --embedding-scale 0.1\" '--l2 {{1,2,3.2,6}}'
+# HLBL Embeddings 100 dim, scale 0.32
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim100-scale0.32 --dev -f \"-e representations/hlbl-embeddings-100dim.txt.gz --embedding-scale 0.32\" '--l2 {{1,2,3.2,6}}'
+# HLBL Embeddings 100 dim, scale 3.2
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim100-scale3.2 --dev -f \"-e representations/hlbl-embeddings-100dim.txt.gz --embedding-scale 3.2\" '--l2 {{1,2,3.2,6}}'
+
+# HLBL Embeddings 50 dim, scale 1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale1 --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1\" '--l2 {{1,2,3.2,6}}'
+# HLBL Embeddings 50 dim, scale 0.1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale0.1 --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 0.1\" '--l2 {{1,2,3.2,6}}'
+# HLBL Embeddings 50 dim, scale 10
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale10 --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 10\" '--l2 {{1,2,3.2,6}}'
+# HLBL Embeddings 50 dim, scale 0.32
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale0.32 --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 0.32\" '--l2 {{1,2,3.2,6}}'
+# HLBL Embeddings 50 dim, scale 3.2
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale3.2 --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 3.2\" '--l2 {{1,2,3.2,6}}'
+
+# Different norm parameters?
+
+# Different brown prefixes
+# No POS features
+# Feature conjunctions (with single repr)
+# Combinations of reprs
