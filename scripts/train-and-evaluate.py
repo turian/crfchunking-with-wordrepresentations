@@ -67,6 +67,7 @@ modelfile = join(workdir, "model.l2=%s.%s" % (options.l2, trainfile))
 
 if os.path.exists(scoredevalfile):
     print >> sys.stderr, "%s exists. STOPPING" % scoredevalfile
+    sys.exit(0)
 
 cmd = "cat %s | %s %s > %s" % (join(datadir, trainfile), featurescript, options.features, featurestrainfile)
 run(cmd)
