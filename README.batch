@@ -190,6 +190,16 @@ dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale3.2 
 
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-cw --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20}}'
 
+# Brown c1000, no pos, compound representations
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c1000.compound-representations.no-pos --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt --compound-representation-features --no-pos-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+# Brown c3200, no pos, compound representations
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c3200.compound-representations.no-pos --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt --compound-representation-features --no-pos-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+
+# Brown c1000, compound representations
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c1000.compound-representations --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt --compound-representation-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+# Brown c3200, compound representations
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c3200.compound-representations --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt --compound-representation-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+
 # Terry Koo brown prefixes
 #
 # No POS features

@@ -16,6 +16,7 @@ parser.add_option("-e", "--embedding", dest="embedding", action="append", help="
 parser.add_option("--brown-prefixes", dest="prefixes", default="4,6,10,20", help="brown prefixes")
 parser.add_option("--embedding-scale", dest="embeddingscale", type="float", default="1.0", help="scaling factor for embeddings")
 parser.add_option("--no-pos-features", dest="no_pos_features", default=False, action="store_true", help="don't use any POS features")
+parser.add_option("--compound-representation-features", dest="compound_representation_features", default=False, action="store_true", help="compound the word representation features")
 
 (options, args) = parser.parse_args()
 assert len(args) == 0
@@ -59,8 +60,19 @@ def output_features(fo, seq):
                 if seq[pos][0] not in cluster: continue
                 for p in prefixes:
                     fs.append("%sbp%d-%d=%s" % (name, j, p, cluster[seq[pos][0]][:p]))
+            if options.compound_representation_features:
+                for name, poss in zip(["U15", "U16", "U17", "U18", "U20", "U21", "U22"], [(i-2,i-1), (i-1,i), (i, i+1), (i+1, i+2), (i-2, i-1, i), (i-1, i, i+1), (i, i+1, i+2)]):
+                    cs = []
+                    for pos in poss:
+                        if seq[pos][0] not in cluster: continue
+                        cs.append(cluster[seq[pos][0]])
+                    if len(cs) < len(poss): continue
+                    assert len(cs) == len(poss)
+                    for p in prefixes:
+                        fs.append("%sbp%d-%d=%s" % (name, j, p, string.join([c[:p] for c in cs], sep="/")))
 
         for j, embedding in enumerate(word_to_embedding):
+            if options.compound_representation_features: assert 0
             for name, pos in zip(["U00", "U01", "U02", "U03", "U04"], [i-2,i-1,i,i+1,i+2]):
                 w = seq[pos][0]
                 if w not in embedding: w = "*UNKNOWN*"
