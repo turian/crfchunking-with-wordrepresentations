@@ -17,6 +17,7 @@ parser.add_option("--brown-prefixes", dest="prefixes", default="4,6,10,20", help
 parser.add_option("--embedding-scale", dest="embeddingscale", type="float", default="1.0", help="scaling factor for embeddings")
 parser.add_option("--no-pos-features", dest="no_pos_features", default=False, action="store_true", help="don't use any POS features")
 parser.add_option("--compound-representation-features", dest="compound_representation_features", default=False, action="store_true", help="compound the word representation features")
+parser.add_option("--compound-embedding-threshold", dest="compound_embedding_threshold", default="0", help="min threshold for compound embedding features")
 
 (options, args) = parser.parse_args()
 assert len(args) == 0
@@ -72,12 +73,41 @@ def output_features(fo, seq):
                         fs.append("%sbp%d-%d=%s" % (name, j, p, string.join([c[:p] for c in cs], sep="/")))
 
         for j, embedding in enumerate(word_to_embedding):
-            if options.compound_representation_features: assert 0
             for name, pos in zip(["U00", "U01", "U02", "U03", "U04"], [i-2,i-1,i,i+1,i+2]):
                 w = seq[pos][0]
                 if w not in embedding: w = "*UNKNOWN*"
                 for d in range(len(embedding[w])):
                     fs.append("%se%d-%d=1:%g" % (name, j, d, embedding[w][d]))
+            if options.compound_representation_features:
+#                for name, poss in zip(["U15", "U16", "U17", "U18", "U20", "U21", "U22"], [(i-2,i-1), (i-1,i), (i, i+1), (i+1, i+2), (i-2, i-1, i), (i-1, i, i+1), (i, i+1, i+2)]):
+                for name, poss in zip(["U15", "U16", "U17", "U18", "U20", "U21", "U22"], [(i-2,i-1), (i-1,i), (i, i+1), (i+1, i+2), (i-2, i-1, i), (i-1, i, i+1), (i, i+1, i+2)]):
+                    es = []
+                    for pos in poss:
+                        w = seq[pos][0]
+                        if w not in embedding: w = "*UNKNOWN*"
+                        es.append(embedding[w])
+                    assert len(es) == len(poss)
+
+                    value = [1.]
+                    #print "Orig:", value
+                    import numpy
+                    for e in es:
+                        #print "value <-", e, "*", value
+                        value = numpy.outer(value, e)
+                        value = numpy.reshape(value, value.size)
+                        #print value
+                    # Transform the value back into the correct scale
+                    # e.g. sqrt for product of two vectors
+                    # We preserve the sign of the value, though
+                    value = (numpy.abs(value) ** (1./len(es))) * ((value > 0)*2-1)
+
+                    # Threshold values
+                    value = value * (numpy.abs(value) >= float(options.compound_embedding_threshold))
+                    for d in range(len(value)):
+                        if value[d] == 0: continue
+                        fs.append("%se%d-%d=1:%g" % (name, j, d, value[d]))
+#                    print value.shape
+#                    print value
 
         if not options.no_pos_features:
             fs.append('U10=%s' % seq[i-2][1])
