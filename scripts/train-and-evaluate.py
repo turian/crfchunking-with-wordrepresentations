@@ -69,12 +69,16 @@ modelfile = join(workdir, "model.l2=%s.%s" % (options.l2, trainfile))
 if os.path.exists(scoredevalfile):
     print >> sys.stderr, "%s exists. STOPPING" % scoredevalfile
 
-cmd = "cat %s | %s %s > %s" % (join(datadir, trainfile), featurescript, options.features, featurestrainfile)
-run(cmd)
+if os.path.exists(modelfile + ".gz"):
+    run("gunzip %s.gz" % modelfile)
 
-cmd = "crfsuite learn -p feature.minfreq=%s -p algorithm=sgd -p feature.possible_transitions=1 -p feature.possible_states=1  -p regularization.sigma=%s -m %s %s 2>&1 | tee %s.err" % (options.minfreq, options.l2, modelfile, featurestrainfile, modelfile)
-run(cmd)
-run("gzip -f %s" % featurestrainfile)
+if not os.path.exists(modelfile):
+    cmd = "cat %s | %s %s > %s" % (join(datadir, trainfile), featurescript, options.features, featurestrainfile)
+    run(cmd)
+
+    cmd = "crfsuite learn -p feature.minfreq=%s -p algorithm=sgd -p feature.possible_transitions=1 -p feature.possible_states=1  -p regularization.sigma=%s -m %s %s 2>&1 | tee %s.err" % (options.minfreq, options.l2, modelfile, featurestrainfile, modelfile)
+    run(cmd)
+    run("gzip -f %s" % featurestrainfile)
 
 cmd = "cat %s | %s %s > %s" % (join(datadir, evalfile), featurescript, options.features, featuresevalfile)
 run(cmd)
