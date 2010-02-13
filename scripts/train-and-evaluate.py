@@ -22,6 +22,7 @@ parser.add_option("--dev", dest="dev", action="store_true", help="Train on train
 parser.add_option("--test", dest="dev", action="store_false", help="Train on train and evaluate on dev")
 parser.add_option("-f", "--features", dest="features", help="Parameters for feature generation", type="string", default="")
 parser.add_option("--l2", dest="l2", help="l2 sigma", type="string")
+parser.add_option("--minfreq", dest="minfreq", default="0", help="Cut-off threshold for occurrence frequency of a feature")
 
 (options, args) = parser.parse_args()
 assert len(args) == 0
@@ -71,7 +72,7 @@ if os.path.exists(scoredevalfile):
 cmd = "cat %s | %s %s > %s" % (join(datadir, trainfile), featurescript, options.features, featurestrainfile)
 run(cmd)
 
-cmd = "crfsuite learn -p algorithm=sgd -p feature.possible_transitions=1 -p feature.possible_states=1  -p regularization.sigma=%s -m %s %s 2>&1 | tee %s.err" % (options.l2, modelfile, featurestrainfile, modelfile)
+cmd = "crfsuite learn -p feature.minfreq=%s -p algorithm=sgd -p feature.possible_transitions=1 -p feature.possible_states=1  -p regularization.sigma=%s -m %s %s 2>&1 | tee %s.err" % (options.minfreq, options.l2, modelfile, featurestrainfile, modelfile)
 run(cmd)
 run("gzip -f %s" % featurestrainfile)
 
