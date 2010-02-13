@@ -187,18 +187,41 @@ dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale0.32
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale3.2 --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 3.2\" '--l2 {{1,2,3.2,6}}'
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale3.2 --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 3.2\" '--l2 {{10,20,32,60,100,200}}'
 
-
+# Best Brown + best CW
+# dev: l2=1, 94.76
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-cw --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20}}'
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-cw --test -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1\" '--l2 1'
 
 # Brown c1000, no pos, compound representations
+# dev: l2=10, 92.75
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c1000.compound-representations.no-pos --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt --compound-representation-features --no-pos-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
 # Brown c3200, no pos, compound representations
+# dev: l2=2, 93.06
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c3200.compound-representations.no-pos --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt --compound-representation-features --no-pos-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
 
 # Brown c1000, compound representations
+# dev: l2=3.2 or 6, 94.52
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c1000.compound-representations --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt --compound-representation-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
 # Brown c3200, compound representations
+# dev: l2=3.2, 94.67
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-c3200.compound-representations --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt --compound-representation-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+
+# C&W, dim 50, scale 0.1,compound representations (threshold 0.5), no pos
+#dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim50-scale0.1.compound-representations.no-pos --dev -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1 --compound-representation-features --compound-embedding-threshold 0.5 --no-pos-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim50-scale0.1.compound-representations.no-pos --dev -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1 --compound-representation-features --compound-embedding-threshold 0.5 --no-pos-features\" '--l2 {{0.32,0.67,1,2,3.2,6,20.1,30}}'
+# C&W, dim 50, scale 0.1, compound representations (threshold 0.5)
+#dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim50-scale0.1.compound-representations --dev -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1 --compound-representation-features --compound-embedding-threshold 0.5\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-dim50-scale0.1.compound-representations --dev -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1 --compound-representation-features --compound-embedding-threshold 0.5\" '--l2 {{0.33,0.6,1.01,2.01,3.2,6,10,20,30}}'
+
+# HLBL Embeddings 50 dim, scale 1, compound representations (threshold 0.5)
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale1.compound-representations --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1 --compound-representation-features --compound-embedding-threshold 0.5\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+# HLBL Embeddings 50 dim, scale 1, compound representations (threshold 0.5), no pos
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale1.compound-representations.no-pos --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1 --compound-representation-features --compound-embedding-threshold 0.5 --no-pos-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+
+# HLBL Embeddings 50 dim, scale 1, compound representations (threshold 0.25)
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale1.compound-representations.threshold-0.25 --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1 --compound-representation-features --compound-embedding-threshold 0.25\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
+# HLBL Embeddings 50 dim, scale 1, compound representations (threshold 0.25), no pos
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale1.compound-representations.threshold-0.25.no-pos --dev -f \"-e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1 --compound-representation-features --compound-embedding-threshold 0.25 --no-pos-features\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20,30}}'
 
 # Terry Koo brown prefixes
 #
