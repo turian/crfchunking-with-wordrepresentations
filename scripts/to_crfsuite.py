@@ -14,7 +14,7 @@ parser = OptionParser()
 parser.add_option("-b", "--brown", dest="brown", action="append", help="brown clusters to use")
 parser.add_option("-e", "--embedding", dest="embedding", action="append", help="embedding to use")
 parser.add_option("--brown-prefixes", dest="prefixes", default="4,6,10,20", help="brown prefixes")
-parser.add_option("--embedding-scale", dest="embeddingscale", type="float", default="1.0", help="scaling factor for embeddings")
+parser.add_option("--embedding-scale", dest="embeddingscale", type="float", action="append", help="scaling factor for embeddings (if a list, different scaling for each embedding)")
 parser.add_option("--no-pos-features", dest="no_pos_features", default=False, action="store_true", help="don't use any POS features")
 parser.add_option("--compound-representation-features", dest="compound_representation_features", default=False, action="store_true", help="compound the word representation features")
 parser.add_option("--compound-embedding-threshold", dest="compound_embedding_threshold", default="0", help="min threshold for compound embedding features")
@@ -40,9 +40,14 @@ for i, embeddingfile in enumerate(options.embedding):
     print >> sys.stderr, "Reading Embedding file: %s" % embeddingfile
     word_to_embedding.append({})
     assert len(word_to_embedding) == i+1
+    if len(options.embeddingscale) == 1:
+        scale = options.embeddingscale[0]
+    else:
+        assert len(options.embeddingscale) == len(options.embedding)
+        scale = options.embeddingscale[i]
     for l in myopen(embeddingfile):
         sp = string.split(l)
-        word_to_embedding[i][sp[0]] = [float(v)*options.embeddingscale for v in sp[1:]]
+        word_to_embedding[i][sp[0]] = [float(v)*scale for v in sp[1:]]
 
 def output_features(fo, seq):
     for i in range(2, len(seq)-2):
