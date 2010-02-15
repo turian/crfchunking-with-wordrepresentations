@@ -73,8 +73,22 @@ if os.path.exists(modelfile + ".gz"):
     run("gunzip %s.gz" % modelfile)
 
 if not os.path.exists(modelfile):
-    cmd = "cat %s | %s %s > %s" % (join(datadir, trainfile), featurescript, options.features, featurestrainfile)
-    run(cmd)
+    # See if we already have featurestrainfile built, and the file is the correct length.
+    have_featurestrainfile = False
+    if os.path.exists(featurestrainfile):
+        cnt1 = 0
+        for l in open(featurestrainfile): cnt1 += 1
+        cnt2 = 0
+        for l in open(join(datadir, trainfile)): cnt2 += 1
+        print >> sys.stderr, "Line count of %s: %d" % (featurestrainfile, cnt1)
+        print >> sys.stderr, "Line count of %s: %d" % (join(datadir, trainfile), cnt2)
+        if cnt1 == cnt2:
+            have_featurestrainfile = True
+            print >> sys.stderr, "No need to regenerate features file"
+
+    if not have_featurestrainfile:
+        cmd = "cat %s | %s %s > %s" % (join(datadir, trainfile), featurescript, options.features, featurestrainfile)
+        run(cmd)
 
     cmd = "crfsuite learn -p feature.minfreq=%s -p algorithm=sgd -p feature.possible_transitions=1 -p feature.possible_states=1  -p regularization.sigma=%s -m %s %s 2>&1 | tee %s.err" % (options.minfreq, options.l2, modelfile, featurestrainfile, modelfile)
     run(cmd)
