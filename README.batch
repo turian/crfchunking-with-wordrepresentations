@@ -8,6 +8,19 @@
 # test: 93.79
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n baseline --test --l2 3.2
 
+# Baseline, redo
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n baseline.redo --dev '--l2 {{0.32,0.6,1,2,3.2,6,10,20,100}}'
+# Baseline, minfreq 1
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n baseline.minfreq-1 --dev --minfreq=1 '--l2 {{0.32,0.6,1,2,3.2,6,10,20,100}}'
+# Baseline, minfreq 2
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n baseline.minfreq-2 --dev --minfreq=2 '--l2 {{0.32,0.6,1,2,3.2,6,10,20,100}}'
+# Baseline, minfreq 3
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n baseline.minfreq-3 --dev --minfreq=3 '--l2 {{0.32,0.6,1,2,3.2,6,10,20,100}}'
+# Baseline, minfreq 5
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n baseline.minfreq-5 --dev --minfreq=5 '--l2 {{0.32,0.6,1,2,3.2,6,10,20,100}}'
+# Baseline, minfreq 10
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n baseline.minfreq-10 --dev --minfreq=10 '--l2 {{0.32,0.6,1,2,3.2,6,10,20,100}}'
+
 # Baseline, no POS
 # dev: l2=6, 90.02
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n baseline.no-pos --dev -f \"--no-pos-features\" '--l2 {{1,2,3.2,6,10}}'
@@ -190,7 +203,26 @@ dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n hlbl-dim50-scale3.2 
 # Best Brown + best CW
 # dev: l2=1, 94.76
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-cw --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20}}'
+# test: 94.35
 dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-cw --test -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1\" '--l2 1'
+
+# Best Brown + best HLBL
+# dev: l2=3.2, 94.62
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-hlbl --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20}}'
+# test: 94.13
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-hlbl --test -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1\" '--l2 3.2'
+
+# Best CW + best HLBL
+# dev: l2=2,6, 94.68
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-and-hlbl --dev -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1 -e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20}}'
+# test: 94.25
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n cw-and-hlbl --test -f \"-e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1 -e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1\" '--l2 2'
+
+# Best Brown + CW + best HLBL
+# dev: l2=2, 94.72
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-cw-and-hlbl --dev -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1 -e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1\" '--l2 {{0.32,0.6,1,2,3.2,6,10,20}}'
+# test: 94.15
+dbidispatch --exp_dir="" ./scripts/train-and-evaluate.py -n brown-and-cw-and-hlbl --test -f \"-b representations/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt -e representations/cw-embeddings-50dim.txt.gz --embedding-scale 0.1 -e representations/hlbl-embeddings-50dim.txt.gz --embedding-scale 1\" '--l2 2'
 
 # Brown c1000, no pos, compound representations
 # dev: l2=10, 92.75
